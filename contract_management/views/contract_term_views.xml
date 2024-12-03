@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="contract_term_model_view_form" model="ir.ui.view">
+            <field name="name">contract.term.form</field>
+            <field name="model">contract.term</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <field name="name" string="Term title" />
+                            <field name="input_field_ids" string="Input fields" options="{'no_create': true}"/>
+                            <field name="content_ids" string="Content" options="{'no_create': true}" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    
+    </data>
+    
+
+</odoo>

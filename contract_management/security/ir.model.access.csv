@@ -1,5 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_estate_property,access_estate_property,model_estate_property,base.group_user,1,1,1,1
-access_estate_property_type, access_estate_property_type,model_estate_property_type,base.group_user,1,1,1,1
-access_estate_property_tag, access_estate_property_tag,model_estate_property_tag,base.group_user,1,1,1,1
-access_estate_property_offer, access_estate_property_offer,model_estate_property_offer,base.group_user,1,1,1,1
+access_contract_document,access_contract_document,model_contract_document,base.group_user,1,1,1,1
+access_contract_template, access_contract_template,model_contract_template,base.group_user,1,1,1,1
+access_contract_term, access_contract_term,model_contract_term,base.group_user,1,1,1,1
+access_contract_term_content, access_contract_term_content,model_contract_term_content,base.group_user,1,1,1,1
+access_contract_input_field, access_contract_input_field,model_contract_input_field,base.group_user,1,1,1,1
+access_contract_document_tag, access_contract_document_tag,model_contract_document_tag,base.group_user,1,1,1,1
