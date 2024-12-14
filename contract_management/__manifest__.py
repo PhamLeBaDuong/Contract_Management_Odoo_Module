@@ -16,6 +16,9 @@
         'views/contract_template_views.xml',
         'views/contract_document_tag.xml',
         'views/contract_term_views.xml',
+        'views/contract_input_field_views.xml',
+        'views/contract_term_content_views.xml',
+        'views/contract_document_report.xml',
         'views/contract_menu.xml'
     ],
     "application" : False,

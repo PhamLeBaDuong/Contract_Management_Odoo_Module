@@ -25,15 +25,16 @@
             <field name="arch" type="xml">
                 <form string="">
                     <sheet>
+                        <div class="oe_title" style="text-align: center;">
+                        <h1><field name="name"/></h1>
+                        </div>
                         <group>
-                            <field name="name" string="Name"/>
-                        </group>
-                        <group>
-                            <field name="term_ids" string="Terms" options="{'no_create': true}">
+                            <field name="term_ids" string="Terms and Clauses" options="{'no_create': true}" />
+                            <!-- <field name="term_ids" string="Terms" options="{'no_create': true}">
                                 <list>
                                     <field name="name" string="Name"/>
                                 </list>
-                            </field>
+                            </field> -->
                         </group>
                     </sheet>
                 </form>

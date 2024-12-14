@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
   <data>
   
     <record id="contract_document_model_action" model="ir.actions.act_window">
@@ -14,14 +13,64 @@
         <field name="model">contract.document</field>
         <field name="arch" type="xml">
             <form string="">
+                <header>
+                    <field name="status" string="Status" widget="statusbar" statusbar_visible="new,waiting,signed,canceled"/>
+                    <button name="print_contract" string="Print Contract" type="object" class="oe_highlight"/>
+                </header>
                 <sheet>
-                    <group>
-                        <field name="title" string="Title" />
-                        <field name="sideA_id" />
-                        <field name="sideB_id" />
-                        <field name="template_id" string="Template" options="{'no_create': true}"/>
-                        
-                    </group>
+                    <div class="oe_title">
+                    <h1><field name="title"/></h1>
+                    </div>
+                    <!-- <group> -->
+                        <group col="12">
+                            <group colspan="6">
+                                <field name="sideA_id" string="Side A" options="{'no_create': true}"/>
+                                <field name="sideA_name" />
+                                <field name="sideA_birthday" />
+                                <field name="sideA_work_email" />
+                                <field name="sideA_work_phone" />
+                                <field name="sideA_address_id" />
+                            </group>
+                            <group colspan="6">
+                                <field name="sideB_user_id" />
+                                <field name="sideB_name" />
+                                <field name="sideB_birthday" />
+                                <field name="sideB_work_email" />
+                                <field name="sideB_work_phone" />
+                                <field name="sideB_address_id" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="date_of_creation" />
+                            <field name="expiration_date" />
+                            <field name="date_of_execution" />
+                            <!-- <field name="title" string="Title" /> -->
+                            <field name="template_id" string="Template" options="{'no_create': true}"/>
+                            
+                        </group>
+                        <field name="document_term_ids" >
+                            <list>
+                                <field name="name" string="Term title" />
+                            </list>
+                            <form>
+                                <field name="name" string="Term title" />
+                                <field name="input_field_ids" string="Input fields" options="{'no_create': true}" >
+                                    <list editable="bottom">
+                                        <field name="name" string="Name"/>
+                                        <field name="value" widget="text"/>
+                                    </list>
+                                    <!-- <form>
+                                        <group name="name" string="string">
+                                            <field name="name" />
+                                            <field name="value"/>
+
+                                        </group>
+                                    </form> -->
+                                </field>
+                                <field name="content_ids" string="Line of clauses" options="{'no_create': true}" />
+                            </form>
+                        </field>
+                    <!-- </group> -->
                 </sheet>
             </form>
         </field>
@@ -33,14 +82,9 @@
         <field name="arch" type="xml">
             <list string="">
                 <field name="title" string="Name"/>
-                
             </list>
         </field>
     </record>
-
-
   
   </data>
-    
-
 </odoo>

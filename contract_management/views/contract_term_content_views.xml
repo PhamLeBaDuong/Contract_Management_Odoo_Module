@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="contract_term_content_model_view_list" model="ir.ui.view">
+            <field name="name">contract.term.content.list</field>
+            <field name="model">contract.term.content</field>
+            <field name="arch" type="xml">
+                <list string="">
+                    <field name="content" />
+                </list>
+            </field>
+        </record>
+
+        <record id="contract_term_content_model_view_form" model="ir.ui.view">
+            <field name="name">contract.term.content.form</field>
+            <field name="model">contract.term.content</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <field name="content" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

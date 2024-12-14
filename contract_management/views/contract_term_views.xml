@@ -12,13 +12,51 @@
                         <group>
                             <field name="name" string="Term title" />
                             <field name="input_field_ids" string="Input fields" options="{'no_create': true}"/>
-                            <field name="content_ids" string="Content" options="{'no_create': true}" />
+                            <field name="content_ids" string="Line of clauses" options="{'no_create': true}" />
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
-    
+
+        <record id="contract_term_model_view_form_document" model="ir.ui.view">
+            <field name="name">contract.term.form.document</field>
+            <field name="model">contract.term</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <field name="name" string="Term title" />
+                            <field name="input_field_ids" string="Input fields" options="{'no_create': true}">
+                                <list>
+                                    <field name="name" string="Name"/>
+                                    <field name="value" string="Value"/>
+                                </list>
+                            </field>
+                            <field name="content_ids" string="Line of clauses" options="{'no_create': true}" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="contract_term_model_view_list" model="ir.ui.view">
+            <field name="name">contract.term.list</field>
+            <field name="model">contract.term</field>
+            <field name="arch" type="xml">
+                <!-- <notebook>
+                    <page name="name" string="">
+                        <field name="input_field_ids" string="Input fields" />
+                        <field name="content_ids" string="Line of clauses" />
+                        
+                    </page>
+                </notebook> -->
+                <list string="" open_form_view = "true">
+                    <field name="name" string="Term title"/>
+                </list>
+            </field>
+        </record>
+
     </data>
     
 

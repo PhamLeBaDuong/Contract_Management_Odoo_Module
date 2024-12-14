@@ -10,10 +10,24 @@
                 <form string="">
                     <sheet>
                         <group>
-                            
+                            <field name="name" />
+                            <field name="field_type" />
                         </group>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+
+        <record id="contract_input_field_model_view_list" model="ir.ui.view">
+            <field name="name">contract.input.field.list</field>
+            <field name="model">contract.input.field</field>
+            <field name="arch" type="xml">
+                <list string="">
+                    <field name="name" string="Name" />
+                    <field name="field_type" string="Field Type" />
+                    
+                </list>
             </field>
         </record>
     

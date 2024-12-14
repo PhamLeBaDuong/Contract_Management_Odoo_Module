@@ -8,6 +8,7 @@ class ContractInputField(models.Model):
     _description = "Contract input field"
 
     name = fields.Char()
+    value = fields.Char()
     field_type = fields.Selection([('char','Char'), ('date','Date'),('integer', 'Integer'),('selection','Selection')], required = True)
     required=fields.Boolean()
     selecction_options = fields.Char()

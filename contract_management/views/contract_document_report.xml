@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="contract_document_report"
+            model="contract.document"
+            string="Contract Document"
+            report_type="qweb-pdf"
+            name="contract_module.contract_management.views.contract_document_report_template"
+            file="contract_module.contract_management.views.contract_document_report_template"
+        />
+
+        <template id="contract_document_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2><t t-esc="doc.title"/></h2>
+
+                            <!-- Side A Information -->
+                            <h3>Side A:</h3>
+                            <p>Name: <t t-esc="doc.sideA_name"/></p>
+                            <p>Birthday: <t t-esc="doc.sideA_birthday"/></p>
+                            <!-- ... other Side A fields ... -->
+
+                            <!-- Side B Information -->
+                            <h3>Side B:</h3>
+                            <p>Name: <t t-esc="doc.sideB_name"/></p>
+                            <p>Birthday: <t t-esc="doc.sideB_birthday"/></p>
+                           
+                            <t t-set="counter" t-value="1"/>
+                            <!-- Terms -->
+                            <h3>Terms:</h3>
+                            <t t-foreach="doc.document_term_ids" t-as="term">
+                                <h4><t t-esc="counter"/>. Term: <t t-esc="term.name"/></h4>
+                                <!-- <p><t t-esc="term.description"/></p> -->
+                                 <ul>
+                                    <t t-foreach="term.input_field_ids" t-as="field">
+                                        <li><t t-esc="field.name"/>: <t t-esc="field.value"/></li>
+                                    </t>
+                                </ul>
+                                <ul>
+                                    <t t-foreach="term.content_ids" t-as="content">
+                                        <li><t t-esc="content.content"/></li>
+                                    </t>
+                                </ul>
+                                <t t-set="counter" t-value="counter + 1"/>
+                            </t>
+
+
+
+                            <!-- ... other contract details like dates, tags, etc. ... -->
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
