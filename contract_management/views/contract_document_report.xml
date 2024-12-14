@@ -1,39 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <report
+
+        <!-- <report
             id="contract_document_report"
             model="contract.document"
-            string="Contract Document"
+            string="Contract Document Preview"
             report_type="qweb-pdf"
-            name="contract_module.contract_management.views.contract_document_report_template"
-            file="contract_module.contract_management.views.contract_document_report_template"
-        />
+            name="contract_management.contract_document"
+            file="contract_management.contract_document"
+        /> -->
 
-        <template id="contract_document_report_template">
+        <!-- <record id="conract_document_model_report" model="ir.actions.report">
+            <field name="name">Contract Report</field>
+            <field name="model">contract.document</field>
+            <field name="report_name">contract_management.contract_document_report_template</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_file">contract_management.contract_document_report_template</field>
+            <field name="print_report_name">Contract</field>
+            <field name="binding_model_id" ref="contract_management.contract_document"/>
+            <field name="binding_type">report</field>
+        </record>    -->
+
+        <record id="action_contract_document_report" model="ir.actions.report">
+            <field name="name">Contract Report</field>
+            <field name="model">contract.document</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">contract_management.contract_document_report_template</field>
+            <field name="report_file">contract_management.contract_document_report_template</field>
+            <field name="binding_model_id" ref="model_contract_document"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+<template id="contract_document_report_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h2><t t-esc="o.title"/></h2>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <h3>Side A</h3>
+                            <p><strong>Name:</strong> <t t-esc="o.sideA_name"/></p>
+                            <p><strong>Birthday:</strong> <t t-esc="o.sideA_birthday"/></p>
+                            <p><strong>Email:</strong> <t t-esc="o.sideA_work_email"/></p>
+                            <p><strong>Phone:</strong> <t t-esc="o.sideA_work_phone"/></p>
+                            <p><strong>Address:</strong> <t t-esc="o.sideA_address_id.name"/></p>
+                            <p><strong>Gender:</strong> <t t-esc="o.sideA_gender"/></p>
+                        </div>
+                        <div class="col-6">
+                            <h3>Side B</h3>
+                            <p><strong>Name:</strong> <t t-esc="o.sideB_name"/></p>
+                            <p><strong>Birthday:</strong> <t t-esc="o.sideB_birthday"/></p>
+                            <p><strong>Email:</strong> <t t-esc="o.sideB_work_email"/></p>
+                            <p><strong>Phone:</strong> <t t-esc="o.sideB_work_phone"/></p>
+                            <p><strong>Address:</strong> <t t-esc="o.sideB_address_id.name"/></p>
+                            <p><strong>Gender:</strong> <t t-esc="o.sideB_gender"/></p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h3>Contract Details</h3>
+                            <p><strong>Template:</strong> <t t-esc="o.template_id.name"/></p>
+                            <p><strong>Tags:</strong> <t t-esc="', '.join(o.document_tag.mapped('name'))"/></p>
+                            <p><strong>Date of Creation:</strong> <t t-esc="o.date_of_creation"/></p>
+                            <p><strong>Expiration Date:</strong> <t t-esc="o.expiration_date"/></p>
+                            <p><strong>Date of Execution:</strong> <t t-esc="o.date_of_execution"/></p>
+                            <p><strong>Version:</strong> <t t-esc="o.version"/></p>
+                            <p><strong>Status:</strong> <t t-esc="dict(o._fields['status'].selection).get(o.status)"/></p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h3>Terms</h3>
+                            <ul>
+                                <t t-foreach="o.document_term_ids" t-as="term">
+                                    <li><t t-esc="term.name"/></li>
+                                </t>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h3>Input Fields</h3>
+                            <ul>
+                                <t t-foreach="o.input_fields_ids" t-as="field">
+                                    <li><t t-esc="field.name"/></li>
+                                </t>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h3>Contents</h3>
+                            <ul>
+                                <t t-foreach="o.term_content_ids" t-as="content">
+                                    <li><t t-esc="content.name"/></li>
+                                </t>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-6 text-center">
+                            <p>______________________</p>
+                            <p>Side A Signature</p>
+                        </div>
+                        <div class="col-6 text-center">
+                            <p>______________________</p>
+                            <p>Side B Signature</p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+
+        <!-- <template id="contract_document_report_template">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <h2><t t-esc="doc.title"/></h2>
 
-                            <!-- Side A Information -->
                             <h3>Side A:</h3>
                             <p>Name: <t t-esc="doc.sideA_name"/></p>
                             <p>Birthday: <t t-esc="doc.sideA_birthday"/></p>
-                            <!-- ... other Side A fields ... -->
 
-                            <!-- Side B Information -->
                             <h3>Side B:</h3>
                             <p>Name: <t t-esc="doc.sideB_name"/></p>
                             <p>Birthday: <t t-esc="doc.sideB_birthday"/></p>
                            
                             <t t-set="counter" t-value="1"/>
-                            <!-- Terms -->
                             <h3>Terms:</h3>
                             <t t-foreach="doc.document_term_ids" t-as="term">
                                 <h4><t t-esc="counter"/>. Term: <t t-esc="term.name"/></h4>
-                                <!-- <p><t t-esc="term.description"/></p> -->
+                                <p><t t-esc="term.description"/></p>
                                  <ul>
                                     <t t-foreach="term.input_field_ids" t-as="field">
                                         <li><t t-esc="field.name"/>: <t t-esc="field.value"/></li>
@@ -49,11 +163,10 @@
 
 
 
-                            <!-- ... other contract details like dates, tags, etc. ... -->
                         </div>
                     </t>
                 </t>
             </t>
-        </template>
+        </template> -->
     </data>
 </odoo>

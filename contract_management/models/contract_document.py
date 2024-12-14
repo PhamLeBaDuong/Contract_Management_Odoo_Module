@@ -5,6 +5,7 @@ from odoo.tools.float_utils import float_compare, float_is_zero
 
 class ContractDocument(models.Model):
     _name = "contract.document"
+    _inherit =["portal.mixin"]
     _description = "Contract Document"
 
     title = fields.Char()
@@ -81,12 +82,22 @@ class ContractDocument(models.Model):
                 })]
         else:
             self.document_term_ids = [(5,0,0)]
-            self.input_fields_ids = [(5,0,0)]
-            self.term_content_ids = [(5,0,0)]
-
-
     def print_contract(self):
-        return self.env.ref('contract_management.contract_document_report').report_action(self)
+        self.ensure_one()
+        # return {
+        #     'type': 'ir.actions.act_url',
+        #     'target': 'self',
+        #     'url': self.get_portal_url(),
+        # }
+        # return {
+        #     'type': 'ir.actions.report',
+        #     'report_type': 'qweb-pdf',
+        #     'report_name': 'contract_management.contract_document_report',
+        #     'report_file': 'contract_management.contract_document_report',
+        #     'data': {'ids': self.ids, 'model': 'contract.document'},
+        #     'context': self.env.context,
+        # }
+        return self.env.ref('contract_management.action_contract_document_report').report_action(self)
 
 
 # class IrUiView(models.Model):
