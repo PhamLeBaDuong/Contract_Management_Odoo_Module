@@ -52,7 +52,6 @@
                             <p><strong>Email:</strong> <t t-esc="o.sideA_work_email"/></p>
                             <p><strong>Phone:</strong> <t t-esc="o.sideA_work_phone"/></p>
                             <p><strong>Address:</strong> <t t-esc="o.sideA_address_id.name"/></p>
-                            <p><strong>Gender:</strong> <t t-esc="o.sideA_gender"/></p>
                         </div>
                         <div class="col-6">
                             <h3>Side B</h3>
@@ -61,35 +60,34 @@
                             <p><strong>Email:</strong> <t t-esc="o.sideB_work_email"/></p>
                             <p><strong>Phone:</strong> <t t-esc="o.sideB_work_phone"/></p>
                             <p><strong>Address:</strong> <t t-esc="o.sideB_address_id.name"/></p>
-                            <p><strong>Gender:</strong> <t t-esc="o.sideB_gender"/></p>
                         </div>
                     </div>
 
                     <div class="row mt-4">
                         <div class="col-12">
                             <h3>Contract Details</h3>
-                            <p><strong>Template:</strong> <t t-esc="o.template_id.name"/></p>
-                            <p><strong>Tags:</strong> <t t-esc="', '.join(o.document_tag.mapped('name'))"/></p>
                             <p><strong>Date of Creation:</strong> <t t-esc="o.date_of_creation"/></p>
                             <p><strong>Expiration Date:</strong> <t t-esc="o.expiration_date"/></p>
                             <p><strong>Date of Execution:</strong> <t t-esc="o.date_of_execution"/></p>
-                            <p><strong>Version:</strong> <t t-esc="o.version"/></p>
-                            <p><strong>Status:</strong> <t t-esc="dict(o._fields['status'].selection).get(o.status)"/></p>
                         </div>
                     </div>
 
                     <div class="row mt-4">
                         <div class="col-12">
-                            <h3>Terms</h3>
+                            <h3>Terms and Conditions</h3>
                             <ul>
-                                <t t-foreach="o.document_term_ids" t-as="term">
-                                    <li><t t-esc="term.name"/></li>
+                                <t t-foreach="o.document_term_display_ids" t-as="term">
+                                    <h4><t t-esc="term.name"/></h4>
+                                    <t t-foreach="term.content_ids" t-as="content">
+                                        <li><t t-esc="content.content"/></li>
+                                        
+                                    </t>
                                 </t>
                             </ul>
                         </div>
                     </div>
 
-                    <div class="row mt-4">
+                    <!-- <div class="row mt-4">
                         <div class="col-12">
                             <h3>Input Fields</h3>
                             <ul>
@@ -109,7 +107,7 @@
                                 </t>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="row mt-4">
                         <div class="col-6 text-center">

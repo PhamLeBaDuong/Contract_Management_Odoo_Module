@@ -14,17 +14,19 @@
         <field name="arch" type="xml">
             <form string="">
                 <header>
-                    <field name="status" string="Status" widget="statusbar" statusbar_visible="new,waiting,signed,canceled"/>
-                    <button name="print_contract" string="Print Contract" type="object" class="oe_highlight"/>
+                    <button name="action_post" string="Comfirm" type="object" class="oe_highlight" invisible="state in ('posted')"/>
+                    <button name="print_contract" string="Print Contract" type="object" class="oe_highlight" invisible="state in ('draft')"/>
+                    <field name="status" string="Status" widget="statusbar" statusbar_visible="new,sent,signed,canceled" invisible="state in ('draft')"/>
+                    <field name="state" string="State" widget="statusbar" statusbar_visible="draft,posted" invisible="state in ('posted')" />
                 </header>
                 <sheet>
                     <div class="oe_title">
                     <h1><field name="title"/></h1>
                     </div>
-                    <!-- <group> -->
+                        <field name="has_product" string="Related to purchasing?"/>
                         <group col="12">
                             <group colspan="6">
-                                <field name="sideA_id" string="Side A" options="{'no_create': true}"/>
+                                <field name="sideA_user_id" string="Side A" options="{'no_create': true}"/>
                                 <field name="sideA_name" />
                                 <field name="sideA_birthday" />
                                 <field name="sideA_work_email" />
@@ -44,9 +46,86 @@
                             <field name="date_of_creation" />
                             <field name="expiration_date" />
                             <field name="date_of_execution" />
+                            <field name="product_name" invisible="not has_product" />
+                            <field name="product_price" invisible="not has_product" />
+                            <field name="product_description" invisible="not has_product" />
+                            <field name="payment_term" invisible="not has_product"/>
                             <!-- <field name="title" string="Title" /> -->
-                            <field name="template_id" string="Template" options="{'no_create': true}"/>
+                            <field name="template_id" string="Template" options="{'no_create': true}" invisible="state in ('posted')"/>
                             
+                        </group>
+                        <field name="document_term_ids" invisible="state in ('posted')">
+                            <list>
+                                <field name="name" string="Term title" />
+                            </list>
+                            <form>
+                                <field name="name" string="Term title" />
+                                <field name="input_field_ids" string="Input fields" options="{'no_create': true}" >
+                                    <list editable="bottom">
+                                        <field name="name" string="Name"/>
+                                        <field name="value" widget="text"/>
+                                    </list>
+                                </field>
+                                <field name="content_ids" string="Line of clauses" options="{'no_create': true}" >
+                                    <list editable="bottom">
+                                        <field name="content" string="Content"/>
+                                    </list>
+                                </field>
+                            </form>
+                        </field>
+                        <field name="document_term_display_ids" invisible="state in ('draft')" options="{'no_create': true}">
+                            <list>
+                                <field name="name" string="Term title" />
+                            </list>
+                            <form>
+                                <field name="content_ids" options="{'no_create': true, 'no_edit': true}"/>
+                            </form>
+                        </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- <record id="contract_document_model_sign_view_form" model="ir.ui.view">
+        <field name="name">contract.document.form</field>
+        <field name="model">contract.document</field>
+        <field name="arch" type="xml">
+            <form string="" readonly="1">
+                <header>
+                    <field name="status" string="Status" widget="statusbar" statusbar_visible="new,sent,signed,canceled" invisible="state in ('posted')"/>
+                    <field name="state" string="State" widget="statusbar" statusbar_visible="draft,posted" invisible="state in ('draft')" />
+                    <button name="print_contract" string="Print Contract" type="object" class="oe_highlight" invisible="state in ('posted')"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                    <h1><field name="title" readonly="state in ('posted')"/></h1>
+                    </div>
+                    <group>
+                        <group col="12">
+                            <group colspan="6">
+                                <field name="sideA_id" string="Side A" options="{'no_create': true}" readonly="state in ('posted')"/>
+                                <field name="sideA_name"  readonly="state in ('posted')"/>
+                                <field name="sideA_birthday"  readonly="state in ('posted')"/>
+                                <field name="sideA_work_email"  readonly="state in ('posted')"/>
+                                <field name="sideA_work_phone"  readonly="state in ('posted')"/>
+                                <field name="sideA_address_id"  readonly="state in ('posted')"/>
+                            </group>
+                            <group colspan="6">
+                                <field name="sideB_user_id"  readonly="state in ('posted')"/>
+                                <field name="sideB_name"  readonly="state in ('posted')"/>
+                                <field name="sideB_birthday"  readonly="state in ('posted')"/>
+                                <field name="sideB_work_email"  readonly="state in ('posted')"/>
+                                <field name="sideB_work_phone"  readonly="state in ('posted')"/>
+                                <field name="sideB_address_id"  readonly="state in ('posted')"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="date_of_creation"  readonly="state in ('posted')"/>
+                            <field name="expiration_date"  readonly="state in ('posted')"/>
+                            <field name="date_of_execution"  readonly="state in ('posted')"/>
+                            <field name="title" string="Title" />
+                            <field name="template_id" string="Template" options="{'no_create': true}" invisible="state in ('posted')"/>
                         </group>
                         <field name="document_term_ids" >
                             <list>
@@ -59,22 +138,32 @@
                                         <field name="name" string="Name"/>
                                         <field name="value" widget="text"/>
                                     </list>
-                                    <!-- <form>
+                                    <form>
                                         <group name="name" string="string">
                                             <field name="name" />
                                             <field name="value"/>
 
                                         </group>
-                                    </form> -->
+                                    </form>
                                 </field>
                                 <field name="content_ids" string="Line of clauses" options="{'no_create': true}" />
                             </form>
                         </field>
-                    <!-- </group> -->
+                        <group col="12">
+                            <group colspan="6">
+                                <field name="sideA_name" nolabel="1" />
+                                <field name="sideA_signature" />
+                            </group>
+                            <group colspan="6">
+                                <field name="sideB_name" nolabel="1" />
+                                <field name="sideB_signature" />
+                            </group>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
-    </record>
+    </record> -->
 
     <record id="contract_document_model_view_list" model="ir.ui.view">
         <field name="name">contract.document.list</field>
