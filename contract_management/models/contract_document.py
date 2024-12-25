@@ -70,7 +70,7 @@ class ContractDocument(models.Model):
     document_term_ids = fields.Many2many('contract.term', string="Terms")
     input_fields_ids = fields.Many2many('contract.input.field', string="Input Fields")
     term_content_ids = fields.Many2many('contract.term.content', string="Contents")
-    document_term_display_ids = fields.Many2many('contract.term.display', 'document_id', string="Terms")
+    document_term_display_ids = fields.Many2many('contract.term.display', 'document_id', string="Terms", readonly=True)
     
 
     # @api.model
@@ -133,6 +133,29 @@ class ContractDocument(models.Model):
         #     'context': self.env.context,
         # }
         return self.env.ref('contract_management.action_contract_document_report').report_action(self)
+    
+    def send_contract(self):
+        self.ensure_one()
+        return self.write({'status': 'sent'})
+    
+    def sign_contract(self):
+        self.ensure_one()
+        # Launch the wizard instead of directly writing status
+        return {
+            'name': 'Confirm Signature',
+            'type': 'ir.actions.act_window',
+            'res_model': 'contract.signature.wizard',
+            'view_mode': 'form',
+            'view_id': self.env.ref('contract_management.contract_signature_wizard_view_form').id, 
+            'target': 'new',
+            'context': {'default_document_id': self.id},
+        }
+        
+    @api.onchange('sideA_signature','sideB_signature')
+    def check_sign_status(self):
+        if(not self.sideA_signature and not self.sideB_signature):
+            return self.write({'status': 'signed'})
+    
 
     # @api.model
     # def create(self, vals_list):
@@ -181,3 +204,12 @@ class ContractDocument(models.Model):
     #         self.sideA_work_phone = self.sideA_id.work_phone
     #         self.sideA_address_id = self.sideA_id.address_id
     #         self.sideA_gender = self.sideA_id.gender
+
+
+class User(models.Model):
+    _inherit = "res.users"
+
+    document_ids = fields.One2many('contract.document', 'sideA_user_id', string="Documents", domain=[('status', 'not in', ['new', 'canceled'])],readonly=True)
+
+
+    

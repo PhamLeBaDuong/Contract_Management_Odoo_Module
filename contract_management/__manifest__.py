@@ -19,9 +19,10 @@
         'views/contract_input_field_views.xml',
         'views/contract_term_content_views.xml',
         'views/contract_document_report.xml',
+        'views/res_user_views.xml',
         'views/contract_menu.xml'
     ],
-    "application" : False,
+    "application" : True,
     "installable" : True,
     "auto_install" : False,
     "license" : "Other proprietary",

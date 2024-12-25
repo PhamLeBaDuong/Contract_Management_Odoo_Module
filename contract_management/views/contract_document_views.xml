@@ -16,6 +16,9 @@
                 <header>
                     <button name="action_post" string="Comfirm" type="object" class="oe_highlight" invisible="state in ('posted')"/>
                     <button name="print_contract" string="Print Contract" type="object" class="oe_highlight" invisible="state in ('draft')"/>
+                    <button name="send_contract" string="Send" type="object" class="oe_highlight" invisible="status not in ('new') or state in ('draft')"/>
+                    <button name="sign_contract" string="Sign" type="object" class="oe_highlight" invisible="state in ('draft')"/>
+                    <button name="" string="Signed" type="object" class="oe_highlight" disabled="True" invisible="status not in ('signed')"/>
                     <field name="status" string="Status" widget="statusbar" statusbar_visible="new,sent,signed,canceled" invisible="state in ('draft')"/>
                     <field name="state" string="State" widget="statusbar" statusbar_visible="draft,posted" invisible="state in ('posted')" />
                 </header>
@@ -23,29 +26,29 @@
                     <div class="oe_title">
                     <h1><field name="title"/></h1>
                     </div>
-                        <field name="has_product" string="Related to purchasing?"/>
+                        <field name="has_product" string="Related to purchasing?" invisible="state in ('posted')"/>
                         <group col="12">
                             <group colspan="6">
-                                <field name="sideA_user_id" string="Side A" options="{'no_create': true}"/>
-                                <field name="sideA_name" />
-                                <field name="sideA_birthday" />
-                                <field name="sideA_work_email" />
-                                <field name="sideA_work_phone" />
-                                <field name="sideA_address_id" />
+                                <field name="sideA_user_id" string="Side A" options="{'no_create': true}" invisible="state in ('posted')"/>
+                                <field name="sideA_name" readonly="state in ('posted')"/>
+                                <field name="sideA_birthday" readonly="state in ('posted')"/>
+                                <field name="sideA_work_email" readonly="state in ('posted')"/>
+                                <field name="sideA_work_phone" readonly="state in ('posted')"/>
+                                <field name="sideA_address_id" readonly="state in ('posted')"/>
                             </group>
                             <group colspan="6">
-                                <field name="sideB_user_id" />
-                                <field name="sideB_name" />
-                                <field name="sideB_birthday" />
-                                <field name="sideB_work_email" />
-                                <field name="sideB_work_phone" />
-                                <field name="sideB_address_id" />
+                                <field name="sideB_user_id" invisible="state in ('posted')"/>
+                                <field name="sideB_name" readonly="state in ('posted')"/>
+                                <field name="sideB_birthday" readonly="state in ('posted')"/>
+                                <field name="sideB_work_email" readonly="state in ('posted')"/>
+                                <field name="sideB_work_phone" readonly="state in ('posted')"/>
+                                <field name="sideB_address_id" readonly="state in ('posted')"/>
                             </group>
                         </group>
                         <group>
-                            <field name="date_of_creation" />
-                            <field name="expiration_date" />
-                            <field name="date_of_execution" />
+                            <field name="date_of_creation" readonly="state in ('posted')"/>
+                            <field name="expiration_date" readonly="state in ('posted')"/>
+                            <field name="date_of_execution" readonly="state in ('posted')"/>
                             <field name="product_name" invisible="not has_product" />
                             <field name="product_price" invisible="not has_product" />
                             <field name="product_description" invisible="not has_product" />
@@ -75,7 +78,7 @@
                         </field>
                         <field name="document_term_display_ids" invisible="state in ('draft')" options="{'no_create': true}">
                             <list>
-                                <field name="name" string="Term title" />
+                                <field name="name" string="Terms and conditions" />
                             </list>
                             <form>
                                 <field name="content_ids" options="{'no_create': true, 'no_edit': true}"/>
