@@ -2,26 +2,6 @@
 <odoo>
     <data>
 
-        <!-- <report
-            id="contract_document_report"
-            model="contract.document"
-            string="Contract Document Preview"
-            report_type="qweb-pdf"
-            name="contract_management.contract_document"
-            file="contract_management.contract_document"
-        /> -->
-
-        <!-- <record id="conract_document_model_report" model="ir.actions.report">
-            <field name="name">Contract Report</field>
-            <field name="model">contract.document</field>
-            <field name="report_name">contract_management.contract_document_report_template</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_file">contract_management.contract_document_report_template</field>
-            <field name="print_report_name">Contract</field>
-            <field name="binding_model_id" ref="contract_management.contract_document"/>
-            <field name="binding_type">report</field>
-        </record>    -->
-
         <record id="action_contract_document_report" model="ir.actions.report">
             <field name="name">Contract Report</field>
             <field name="model">contract.document</field>
@@ -33,137 +13,126 @@
         </record>
 
 
-<template id="contract_document_report_template">
-    <t t-call="web.html_container">
-        <t t-foreach="docs" t-as="o">
-            <t t-call="web.external_layout">
-                <div class="page">
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <h2><t t-esc="o.title"/></h2>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-6">
-                            <h3>Side A</h3>
-                            <p><strong>Name:</strong> <t t-esc="o.sideA_name"/></p>
-                            <p><strong>Birthday:</strong> <t t-esc="o.sideA_birthday"/></p>
-                            <p><strong>Email:</strong> <t t-esc="o.sideA_work_email"/></p>
-                            <p><strong>Phone:</strong> <t t-esc="o.sideA_work_phone"/></p>
-                            <p><strong>Address:</strong> <t t-esc="o.sideA_address_id.name"/></p>
-                        </div>
-                        <div class="col-6">
-                            <h3>Side B</h3>
-                            <p><strong>Name:</strong> <t t-esc="o.sideB_name"/></p>
-                            <p><strong>Birthday:</strong> <t t-esc="o.sideB_birthday"/></p>
-                            <p><strong>Email:</strong> <t t-esc="o.sideB_work_email"/></p>
-                            <p><strong>Phone:</strong> <t t-esc="o.sideB_work_phone"/></p>
-                            <p><strong>Address:</strong> <t t-esc="o.sideB_address_id.name"/></p>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>Contract Details</h3>
-                            <p><strong>Date of Creation:</strong> <t t-esc="o.date_of_creation"/></p>
-                            <p><strong>Expiration Date:</strong> <t t-esc="o.expiration_date"/></p>
-                            <p><strong>Date of Execution:</strong> <t t-esc="o.date_of_execution"/></p>
-                        </div>
-                    </div>
-
-                    <!-- <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>Terms and Conditions</h3>
-                            <ul>
-                                <t t-foreach="o.document_term_display_ids" t-as="term">
-                                    <h4><t t-esc="term.name"/></h4>
-                                    <t t-foreach="term.content_ids" t-as="content">
-                                        <li><t t-esc="content.content"/></li>
-                                    </t>
-                                </t>
-                            </ul>
-                        </div>
-                    </div> -->
-
-                    <!-- <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>Input Fields</h3>
-                            <ul>
-                                <t t-foreach="o.input_fields_ids" t-as="field">
-                                    <li><t t-esc="field.name"/></li>
-                                </t>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h3>Contents</h3>
-                            <ul>
-                                <t t-foreach="o.term_content_ids" t-as="content">
-                                    <li><t t-esc="content.name"/></li>
-                                </t>
-                            </ul>
-                        </div>
-                    </div> -->
-
-                    <div class="row mt-4">
-                        <div class="col-6 text-center">
-                            <p>______________________</p>
-                            <p>Side A Signature</p>
-                        </div>
-                        <div class="col-6 text-center">
-                            <p>______________________</p>
-                            <p>Side B Signature</p>
-                        </div>
-                    </div>
-                </div>
-            </t>
-        </t>
-    </t>
-</template>
-
-
-        <!-- <template id="contract_document_report_template">
+        <template id="contract_document_report_template">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="doc">
+                <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <h2><t t-esc="doc.title"/></h2>
+                            <div class="row mb-4">
+                                <div class="col-12 text-center">
+                                    <h2 style="color: #2C3E50; padding-bottom: 10px; border-bottom: 2px solid #eee;">
+                                        <t t-esc="o.title"/>
+                                    </h2>
+                                </div>
+                            </div>
 
-                            <h3>Side A:</h3>
-                            <p>Name: <t t-esc="doc.sideA_name"/></p>
-                            <p>Birthday: <t t-esc="doc.sideA_birthday"/></p>
+                            <div class="row mb-4">
+                                <div class="col-6">
+                                    <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                        <h4 style="color: #2C3E50; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Side A</h4>
+                                        <div class="mt-3">
+                                            <strong class="text-muted">Name: </strong>
+                                            <span t-esc="o.sideA_name"/><br/>
+                                            <strong class="text-muted">Birthday: </strong>
+                                            <span t-esc="o.sideA_birthday"/><br/>
+                                            <strong class="text-muted">Email: </strong>
+                                            <span t-esc="o.sideA_work_email"/><br/>
+                                            <strong class="text-muted">Phone: </strong>
+                                            <span t-esc="o.sideA_work_phone"/><br/>
+                                            <strong class="text-muted">Address: </strong>
+                                            <span t-esc="o.sideA_address_id.name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                        <h4 style="color: #2C3E50; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Side B</h4>
+                                        <div class="mt-3">
+                                            <strong class="text-muted">Name: </strong>
+                                            <span t-esc="o.sideB_name"/><br/>
+                                            <strong class="text-muted">Birthday: </strong>
+                                            <span t-esc="o.sideB_birthday"/><br/>
+                                            <strong class="text-muted">Email: </strong>
+                                            <span t-esc="o.sideB_work_email"/><br/>
+                                            <strong class="text-muted">Phone: </strong>
+                                            <span t-esc="o.sideB_work_phone"/><br/>
+                                            <strong class="text-muted">Address: </strong>
+                                            <span t-esc="o.sideB_address_id.name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <h3>Side B:</h3>
-                            <p>Name: <t t-esc="doc.sideB_name"/></p>
-                            <p>Birthday: <t t-esc="doc.sideB_birthday"/></p>
-                           
-                            <t t-set="counter" t-value="1"/>
-                            <h3>Terms:</h3>
-                            <t t-foreach="doc.document_term_ids" t-as="term">
-                                <h4><t t-esc="counter"/>. Term: <t t-esc="term.name"/></h4>
-                                <p><t t-esc="term.description"/></p>
-                                 <ul>
-                                    <t t-foreach="term.input_field_ids" t-as="field">
-                                        <li><t t-esc="field.name"/>: <t t-esc="field.value"/></li>
-                                    </t>
-                                </ul>
-                                <ul>
-                                    <t t-foreach="term.content_ids" t-as="content">
-                                        <li><t t-esc="content.content"/></li>
-                                    </t>
-                                </ul>
-                                <t t-set="counter" t-value="counter + 1"/>
-                            </t>
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                        <h4 style="color: #2C3E50; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Contract Details</h4>
+                                        <div class="mt-3">
+                                            <strong class="text-muted">Date of Creation: </strong>
+                                            <span t-esc="o.date_of_creation"/><br/>
+                                            <strong class="text-muted">Expiration Date: </strong>
+                                            <span t-esc="o.expiration_date"/><br/>
+                                            <strong class="text-muted">Date of Execution: </strong>
+                                            <span t-esc="o.date_of_execution"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div t-if="o.has_product" class="row mb-4">
+                                <div class="col-12">
+                                    <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                        <h4 style="color: #2C3E50; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Product Details</h4>
+                                        <div class="mt-3">
+                                            <strong class="text-muted">Name: </strong>
+                                            <span t-esc="o.product_name"/><br/>
+                                            <strong class="text-muted">Price: </strong>
+                                            <span t-esc="o.product_price"/><br/>
+                                            <strong class="text-muted">Description: </strong>
+                                            <span t-esc="o.product_description"/><br/>
+                                            <strong class="text-muted">Quantity: </strong>
+                                            <span t-esc="o.product_quantity"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                        <h4 style="color: #2C3E50; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Terms and Conditions</h4>
+                                        <div class="mt-3">
+                                            <t t-foreach="o.document_term_display_ids" t-as="term">
+                                                <h5 class="mt-3" style="color: #2C3E50;"><t t-esc="term.name"/></h5>
+                                                <ul class="list-unstyled">
+                                                    <t t-foreach="term.content_ids" t-as="content">
+                                                        <li class="mb-2">• <t t-esc="content.content"/></li>
+                                                    </t>
+                                                </ul>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="row mt-5">
+                                <div class="col-6 text-center">
+                                    <p class="mb-0">Side A Signature</p>
+                                    <div style="border-bottom: 1px solid #000; width: 80%; margin: 20px auto;"></div>
+                                    <img t-if="o.sideA_signature" t-att-src="image_data_uri(o.sideA_signature)" style="max-height: 100px;"/>
+                                    <p class="mt-2"><t t-esc="o.sideA_name"/></p>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <p class="mb-0">Side B Signature</p>
+                                    <div style="border-bottom: 1px solid #000; width: 80%; margin: 20px auto;"></div>
+                                    <img t-if="o.sideB_signature" t-att-src="image_data_uri(o.sideB_signature)" style="max-height: 100px;"/>
+                                    <p class="mt-2"><t t-esc="o.sideB_name"/></p>
+                                </div>
+                            </div>
                         </div>
                     </t>
                 </t>
             </t>
-        </template> -->
+        </template>
     </data>
 </odoo>

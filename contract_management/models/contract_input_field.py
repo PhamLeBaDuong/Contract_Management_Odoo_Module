@@ -12,7 +12,6 @@ class ContractInputField(models.Model):
     field_type = fields.Selection([('char','Char'), ('date','Date'),('integer', 'Integer'),('selection','Selection')], required = True)
     required=fields.Boolean()
     selecction_options = fields.Char()
-    # term_id = fields.Many2one('contact.term', string = 'Term')
     
 
     

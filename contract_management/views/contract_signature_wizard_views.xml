@@ -4,7 +4,7 @@
         <field name="model">contract.signature.wizard</field>
         <field name="arch" type="xml">
             <form string="Confirm Signature">
-                <field name="signature" widget="signature" required="1"/>
+                <field name="input_signature" widget="signature" required="1"/>
                 <footer>
                     <button name="action_confirm_signature" type="object" string="Sign" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>

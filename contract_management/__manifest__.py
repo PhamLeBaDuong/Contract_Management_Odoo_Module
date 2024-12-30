@@ -20,6 +20,7 @@
         'views/contract_term_content_views.xml',
         'views/contract_document_report.xml',
         'views/res_user_views.xml',
+        'views/contract_signature_wizard_views.xml',
         'views/contract_menu.xml'
     ],
     "application" : True,
