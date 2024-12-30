@@ -1,5 +1,5 @@
 from datetime import timedelta
-from odoo import api, fields, models
+from odoo import Command, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_compare, float_is_zero
 
@@ -9,7 +9,7 @@ class ContractDocument(models.Model):
     _description = "Contract Document"
 
     title = fields.Char()
-    sideA_user_id = fields.Many2one('res.users', string="Side A", index=True, tracking=True)
+    sideA_user_id = fields.Many2one('res.users', string="Side A", index=True, tracking=True, required=True)
     # sideA_id = fields.Many2one(related='sideA_user_id.employee_id', string='Side A')
     sideA_id = fields.Many2one(related='sideA_user_id.employee_id', string='Side A')
     
@@ -26,7 +26,7 @@ class ContractDocument(models.Model):
     # sideA_address_id = fields.Many2one('res.partner')
     # sideA_gender = fields.Selection(related='sideA_id.employee_id.gender', groups="hr.group_hr_user")
     # sideA_gender = fields.Selection()
-    sideA_signature = fields.Char()
+    sideA_signature = fields.Image()
     
     # sideA_private_street = fields.Char(related='sideA_id.private_street', readonly=True)
     # sideA_private_street2 = fields.Char(related='sideA_id.private_street2', readonly=True)
@@ -41,64 +41,31 @@ class ContractDocument(models.Model):
     sideB_work_email = fields.Char(related='sideB_user_id.work_phone')
     sideB_address_id = fields.Many2one(related='sideB_id.address_id')
     # sideB_gender = fields.Selection(related='sideB_user_id.gender', groups="hr.group_hr_user")
-    sideB_signature = fields.Char()
+    sideB_signature = fields.Image()
 
 
     template_id = fields.Many2one('contract.template', string="Template")
-    # dynamic_input_values = fields.Json(string="Dynamic Input Values")
     document_tag = fields.Many2many('contract.document.tag', string="Tag")
     date_of_creation = fields.Date('Date of Creation', default = fields.Date.today(), readonly=True)
     expiration_date = fields.Date('Expiration Date', default = fields.Date.today() + timedelta(days=365))
-    date_of_execution = fields.Date('Date of Execution')
+    date_of_execution = fields.Date('Date of Execution', readonly=True)
     version = fields.Integer()
     
-    has_product = fields.Boolean()
-    product_name = fields.Char(string="Product Name")
-    product_price = fields.Integer(string="Product Value")
+    has_product = fields.Boolean(string="Has Product?")
+    product_name = fields.Char(string="Product Name", required=has_product)
+    product_price = fields.Float(string="Product Value", required=has_product)
     product_description = fields.Text(string="Product Description")
-    payment_term = fields.Selection(string="Payment Term", selection=[('monthly', 'Monthly'), ('quarterly', 'Quarterly'), ('annually', 'Annually'), ('one_time', 'One Time')], default='one_time')
+    product_quantity = fields.Integer(string="Product Quantity", required=has_product)
+    # payment_term = fields.Selection(string="Payment Term", selection=[('monthly', 'Monthly'), ('quarterly', 'Quarterly'), ('annually', 'Annually'), ('one_time', 'One Time')], default='one_time')
     
     status = fields.Selection(string="Status", selection=[('new', 'New'), ('sent', 'Sent'), ('signed', 'Signed'), ('canceled', 'Canceled')], default='new')
     state = fields.Selection(string="State", selection=[('draft','Draft'), ('posted','Posted')], default='draft')
 
-    
-    
-    # service_ids = fields.One2many('contract.service', 'document_id', string="Services", related='template_id.service_ids')
-
-        # In contract.document model
-    # document_term_ids = fields.One2many('contract.term', 'document_id', string="Terms")
     document_term_ids = fields.Many2many('contract.term', string="Terms")
     input_fields_ids = fields.Many2many('contract.input.field', string="Input Fields")
     term_content_ids = fields.Many2many('contract.term.content', string="Contents")
     document_term_display_ids = fields.Many2many('contract.term.display', 'document_id', string="Terms", readonly=True)
     
-
-    # @api.model
-    # def create(self, vals):
-    #     res = super().create(vals)
-    #     if res.template_id:
-    #         res.document_input_field_ids = res.template_id.input_field_ids.copy({'document_id': res.id})
-    #         res.document_term_ids = res.template_id.term_ids.copy({'document_id': res.id})
-    #     return res
-    
-    # @api.model
-    # def create(self, vals):
-    #     res = super(ContractDocument, self).create(vals)
-    #     if res.template_id:
-    #         for term in res.template_id.term_ids:
-    #             # term.copy({'document_id': res.id, 'template_id': False}) # Remove link to template
-    #     return res
-    
-    # @api.onchange('sideA_user_id')
-    # def _fetch_sideA(self):
-    #     if self.sideA_user_id:
-    #         # print(self.sideA_user_id)
-    #         self.sideA_id = self.sideA_user_id.employee_id
-    #         self.sideA_birthday = self.sideA_id.birthday
-    #         self.sideA_work_email = self.sideA_id.work_email
-    #         self.sideA_work_phone = self.sideA_id.work_phone
-    #         self.sideA_address_id = self.sideA_id.address_id
-    #         # self.sideA_gender = self.sideA_id.gender
     
     @api.onchange('template_id')
     def _fetch_fields(self):            
@@ -136,11 +103,24 @@ class ContractDocument(models.Model):
     
     def send_contract(self):
         self.ensure_one()
+        if self.has_product:
+            self.env['account.move'].create(
+                {
+                    'partner_id': self.sideA_user_id.partner_id.id, 
+                    'move_type': 'out_invoice',
+                    'invoice_line_ids': [
+                        Command.create({
+                            'name': self.product_name,
+                            'price_unit': self.product_price,
+                            'quantity': self.product_quantity
+                        })
+                    ]
+                }
+            )
         return self.write({'status': 'sent'})
     
     def sign_contract(self):
         self.ensure_one()
-        # Launch the wizard instead of directly writing status
         return {
             'name': 'Confirm Signature',
             'type': 'ir.actions.act_window',
@@ -148,21 +128,12 @@ class ContractDocument(models.Model):
             'view_mode': 'form',
             'view_id': self.env.ref('contract_management.contract_signature_wizard_view_form').id, 
             'target': 'new',
+            'data': {'document_id': self.id},
             'context': {'default_document_id': self.id},
         }
-        
-    @api.onchange('sideA_signature','sideB_signature')
-    def check_sign_status(self):
-        if(not self.sideA_signature and not self.sideB_signature):
-            return self.write({'status': 'signed'})
-    
-
-    # @api.model
-    # def create(self, vals_list):
-    #     records = super().create(vals_list)
-    #     for record in records:
-    #         record.state='drafted'
-    #     return records
+            
+    def signed(self):
+        return
     
     def action_post(self):
         self.ensure_one()
@@ -171,45 +142,31 @@ class ContractDocument(models.Model):
             displayed_contents = []
             for content in term.content_ids:
                 final_content = content.content
-                for input_field in term.input_field_ids:  # Iterate through input fields for the current term
+                for input_field in term.input_field_ids:
                     placeholder = "#(" + input_field.name + ")"
                     if placeholder in final_content:
-                        final_content = final_content.replace(placeholder, input_field.value or "")  # Handle potential missing values
+                        final_content = final_content.replace(placeholder, input_field.value or "")
                 displayed_contents.append((0, 0, {'content': final_content}))
             displayed_terms.append((0, 0, {'name': term.name, 'content_ids': displayed_contents}))
   
         self.document_term_display_ids = displayed_terms
         return self.write({'state': 'posted'})
 
-# class IrUiView(models.Model):
-#     _inherit = 'ir.ui.view'
-#     type = fields.Selection(selection_add=[('custom_view', "Custom View")])
-
-# class IrActionsActWindowView(models.Model):
-#     """
-#        Extends the base 'ir.actions.act_window.view' model to include
-#        a new view mode called 'grid'.
-#    """
-#     _inherit = 'ir.actions.act_window.view'
-#     view_mode = fields.Selection(selection_add=[('custom_view', "Custom View")],
-#                                  ondelete={'custon_view': 'cascade'})
-
-
-    # @api.onchange('sideA_hr_id')
-    # def _fetch_sideA(self):
-    #     if self.sideA_hr_id:
-    #         self.sideA_id = self.sideA_hr_id.user_id
-    #         self.sideA_birthday = self.sideA_id.birthday
-    #         self.sideA_work_email = self.sideA_id.work_email
-    #         self.sideA_work_phone = self.sideA_id.work_phone
-    #         self.sideA_address_id = self.sideA_id.address_id
-    #         self.sideA_gender = self.sideA_id.gender
-
-
 class User(models.Model):
     _inherit = "res.users"
 
-    document_ids = fields.One2many('contract.document', 'sideA_user_id', string="Documents", domain=[('status', 'not in', ['new', 'canceled'])],readonly=True)
+    document_ids = fields.One2many(
+        'contract.document', 
+        string="Documents", compute='_compute_document_ids'
+    )
+
+    @api.depends('document_ids.sideA_user_id', 'document_ids.sideB_user_id')
+    def _compute_document_ids(self):
+        for user in self:
+            document_ids = self.env['contract.document'].search(
+                ['|', ('sideA_user_id', '=', user.id), ('sideB_user_id', '=', user.id)]
+            )
+            user.document_ids = document_ids
 
 
     

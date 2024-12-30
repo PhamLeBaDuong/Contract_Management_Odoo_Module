@@ -30,11 +30,6 @@
                         </div>
                         <group>
                             <field name="term_ids" string="Terms and Clauses" options="{'no_create': true}" />
-                            <!-- <field name="term_ids" string="Terms" options="{'no_create': true}">
-                                <list>
-                                    <field name="name" string="Name"/>
-                                </list>
-                            </field> -->
                         </group>
                     </sheet>
                 </form>

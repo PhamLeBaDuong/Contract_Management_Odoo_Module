@@ -6,7 +6,6 @@ class ContactTermContent(models.Model):
     _description = 'Contract Term Content'
 
     content = fields.Text()
-    # term_id = fields.Many2one('contact.term', string='Term')
 
 
     

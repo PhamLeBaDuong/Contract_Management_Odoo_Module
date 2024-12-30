@@ -44,13 +44,6 @@
             <field name="name">contract.term.list</field>
             <field name="model">contract.term</field>
             <field name="arch" type="xml">
-                <!-- <notebook>
-                    <page name="name" string="">
-                        <field name="input_field_ids" string="Input fields" />
-                        <field name="content_ids" string="Line of clauses" />
-                        
-                    </page>
-                </notebook> -->
                 <list string="" open_form_view = "true">
                     <field name="name" string="Term title"/>
                 </list>

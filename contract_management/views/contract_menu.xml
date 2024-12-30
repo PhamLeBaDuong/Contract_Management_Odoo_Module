@@ -10,7 +10,6 @@
         <menuitem name="Documents" id="contract_second_level_menu_1_2" action="contract_document_model_action" parent="contract_first_level_menu_1"/>
 
         <menuitem name="Settings" id="contract_first_level_menu_2" parent="contract_menu_root" groups="base.group_user"/>
-        <!-- <menuitem name="Property Types" id="contract_second_level_menu_2_1" action="estate_property_type_model_action" parent="estate_first_level_menu_2" /> -->
         <menuitem name="Contract Tags" id="contract_second_level_menu_2_2" action="contract_document_tag_model_action" parent="contract_first_level_menu_2" />
     
     </data>
