@@ -5,7 +5,6 @@ from odoo.tools.float_utils import float_compare, float_is_zero
 
 class ContractDocument(models.Model):
     _name = "contract.document"
-    _inherit =["portal.mixin"]
     _description = "Contract Document"
 
     title = fields.Char()
