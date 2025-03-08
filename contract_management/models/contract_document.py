@@ -8,29 +8,15 @@ class ContractDocument(models.Model):
     _description = "Contract Document"
 
     title = fields.Char()
+    
     sideA_user_id = fields.Many2one('res.users', string="Side A", index=True, tracking=True, required=True)
-    # sideA_id = fields.Many2one(related='sideA_user_id.employee_id', string='Side A')
     sideA_id = fields.Many2one(related='sideA_user_id.employee_id', string='Side A')
-    
-    # sideA_id = fields.Many2one(related='sideA_hr_id.user_id', readonly=True, string='Side A')
     sideA_name = fields.Char(related='sideA_id.name', readonly=False)
-    # sideA_name = fields.Char()
     sideA_birthday = fields.Date(related='sideA_id.birthday', readonly=False)
-    # sideA_birthday = fields.Date()
     sideA_work_email = fields.Char(related='sideA_id.work_email', readonly=False)
-    # sideA_work_email = fields.Char()
     sideA_work_phone = fields.Char(related='sideA_id.work_phone', readonly=False)
-    # sideA_work_phone = fields.Char()
     sideA_address_id = fields.Many2one(related='sideA_id.address_id', readonly=False)
-    # sideA_address_id = fields.Many2one('res.partner')
-    # sideA_gender = fields.Selection(related='sideA_id.employee_id.gender', groups="hr.group_hr_user")
-    # sideA_gender = fields.Selection()
     sideA_signature = fields.Image()
-    
-    # sideA_private_street = fields.Char(related='sideA_id.private_street', readonly=True)
-    # sideA_private_street2 = fields.Char(related='sideA_id.private_street2', readonly=True)
-    # sideA_private_city = fields.Char(related='sideA_id.private_city', readonly=True)
-    # sideA_private_country_id = fields.Many2one(related='sideA_id.private_country_id', readonly=True)
 
     sideB_user_id = fields.Many2one('res.users', string="Side B", default = lambda self: self.env.user, index=True, tracking=True, readonly=True)
     sideB_id = fields.Many2one(related='sideB_user_id.employee_id', string='Side B')
@@ -39,7 +25,6 @@ class ContractDocument(models.Model):
     sideB_work_phone = fields.Char(related='sideB_user_id.work_email')
     sideB_work_email = fields.Char(related='sideB_user_id.work_phone')
     sideB_address_id = fields.Many2one(related='sideB_id.address_id')
-    # sideB_gender = fields.Selection(related='sideB_user_id.gender', groups="hr.group_hr_user")
     sideB_signature = fields.Image()
 
 
@@ -76,8 +61,6 @@ class ContractDocument(models.Model):
                     'name': term.name,
                     'input_field_ids': [(4, x) for x in term.input_field_ids.ids],
                     'content_ids': [(4, x) for x in term.content_ids.ids],
-                    # 'input_field_ids': [(6, 0, term.input_field_ids.ids)],
-                    # 'content_ids': [(6, 0, term.content_ids.ids)],
                     'description': term.description,
                 })]
         else:
@@ -85,19 +68,6 @@ class ContractDocument(models.Model):
             
     def print_contract(self):
         self.ensure_one()
-        # return {
-        #     'type': 'ir.actions.act_url',
-        #     'target': 'self',
-        #     'url': self.get_portal_url(),
-        # }
-        # return {
-        #     'type': 'ir.actions.report',
-        #     'report_type': 'qweb-pdf',
-        #     'report_name': 'contract_management.contract_document_report',
-        #     'report_file': 'contract_management.contract_document_report',
-        #     'data': {'ids': self.ids, 'model': 'contract.document'},
-        #     'context': self.env.context,
-        # }
         return self.env.ref('contract_management.action_contract_document_report').report_action(self)
     
     def send_contract(self):

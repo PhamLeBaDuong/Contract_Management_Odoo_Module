@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="contract_term_payment_plan" model="contract.term">
+            <field name="name">Payment Plan</field>
+            <field name="input_field_ids" eval="[(0, 0, {
+                'name': 'Number of payments',
+                'field_type': 'char'
+            }), (0, 0, {
+                'name': 'Day of the first payment',
+                'field_type': 'char'
+            }), (0, 0, {
+                'name': 'Day of monthly payment',
+                'field_type': 'char'
+            }), (0, 0, {
+                'name': 'Day of the last payment',
+                'field_type': 'char'
+            })]"/>
+            <field name="content_ids" eval="[(0, 0, {
+                'content': 'Within the scope of this Agreement, the Borrower shall pay the total amount in equal installments over a total #(Number of payments). The monthly payment is made on the #(Day of monthly payment) day of each month. The firstpayment will be on #(Day of the first payment) and continue monthly until the last payment which is #(Day of the last payment).'
+            })]"/>
+        </record>
+        
+        <record id="contract_term_cons" model="contract.term">
+            <field name="name">Consequences of Failure to Pay</field>
+            <field name="input_field_ids" eval="[(0, 0, {
+                'name': 'Interest Rate',
+                'field_type': 'char'
+            })]"/>
+            <field name="content_ids" eval="[(0, 0, {
+                'content': 'If the Borrower fails to pay in due date, twice in a row during the Agreement period, balance due becomes due and demandable without the need for an another notice. If the Borrower repudiates to make payment, the Lender shall collect the balance due through the warranty specified in the Section IV below'
+            }), (0, 0, {
+                'content': 'For late payments, a daily default interest of #(Interest Rate) shall be applied.'
+            })]"/>
+        </record>
+        
+        <record id="contract_term_warranty" model="contract.term">
+            <field name="name">Warranty</field>
+            <field name="input_field_ids" eval="[(0, 0, {
+                'name': 'Debt secure method',
+                'field_type': 'char'
+            })]"/>
+            <field name="content_ids" eval="[(0, 0, {
+                'content': 'With the signing of this Agreement, the Borrower has to give a warranty by using #(Debt secure method) in order to secure the debt.'
+            }), (0, 0, {
+                'content': 'The Lender accepts and undertakes that after the payment of all installments and the expiration of this Agreement, this warranty will become null and void.'
+            })]"/>
+        </record>
+        
+        <record id="contract_term_amendment" model="contract.term">
+            <field name="name">Amendment</field>
+            <field name="content_ids" eval="[(0, 0, {
+                'content': 'This Agreement shall be amended only by a written instrument which specifically refers to this Agreement and is executed by the Lender and Borrower. This Agreement shall not be deemed to be amended orally or by virtue of any continuing custom or practice.'
+            })]"/>
+        </record>
+        
+        <record id="contract_term_govern" model="contract.term">
+            <field name="name">Governing Law and Dispute Resolution</field>
+            <field name="input_field_ids" eval="[(0, 0, {
+                'name': 'State',
+                'field_type': 'char'
+            })]"/>
+            <field name="content_ids" eval="[(0, 0, {
+                'content': 'The execution, effectiveness, construction, performance, amendment and termination of this Agreement and the resolution of disputes hereunder shall be governed by the formally published and publicly available laws of #(State).'
+            })]"/>
+        </record>
+        
+        <record id="contract_term_assignment" model="contract.term">
+            <field name="name">Assignment</field>
+            <field name="content_ids" eval="[(0, 0, {
+                'content': 'Neither this Agreement nor any of the rights, interests or obligations hereunder shall be assigned by any of the parties hereto without the prior written consent of the other party. Subject to the preceding sentence, this Agreement will be binding upon, inure to the benefit of and be enforceable by the parties and their respective successors and assigns.'
+            })]"/>
+        </record>
+        
+        <record id="contract_term_notifications" model="contract.term">
+            <field name="name">Notifications</field>
+            <field name="content_ids" eval="[(0, 0, {
+                'content': 'Any notice, offer, approval, request, or other communication (collectively, a notice) required or permitted under this Agreement must be in writing and delivered to the addresses mentioned in this Agreement above.'
+            })]"/>
+        </record>
+        
+        <record id="contract_template_loan_agreement" model="contract.template">
+            <field name="name">Loan Agreement 1</field>
+            <field name="term_ids" eval="[(6, 0, [
+                ref('contract_term_payment_plan'),
+                ref('contract_term_cons'),
+                ref('contract_term_warranty'),
+                ref('contract_term_amendment'),
+                ref('contract_term_govern'),
+                ref('contract_term_assignment'),
+                ref('contract_term_notifications')
+            ])]"/>
+        </record>
+    </data>
+</odoo>
