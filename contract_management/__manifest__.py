@@ -1,15 +1,12 @@
 {
     'name': "Contract Managementt",
-    # The first 2 numbers are Odoo major version, the last 3 are x.y.z version of the module.
-    'version' : "18.0.1.0.0",
+    'version' : "17.0.1.0.0",
     'depends' : ['base', 'base_setup','hr'],
     'author' : 'Duong Pham',
-    # Categories are freeform, for existing categories visit ...
     'category' : 'Customizations',
     'description' : """
     Module descriptionnn
     """,
-    # data files always loaded at installation
     'data': [        
         'security/ir.model.access.csv',
         'views/contract_document_views.xml',

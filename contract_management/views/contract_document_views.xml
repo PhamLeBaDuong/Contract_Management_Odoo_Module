@@ -5,7 +5,7 @@
     <record id="contract_document_model_action" model="ir.actions.act_window">
         <field name="name">Contract Document</field>
         <field name="res_model">contract.document</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
     <record id="contract_document_model_view_form" model="ir.ui.view">
@@ -62,32 +62,38 @@
                             
                         </group>
                         <field name="document_term_ids" invisible="state in ('posted')">
-                            <list>
+                            <tree>
                                 <field name="name" string="Term title" />
-                            </list>
+                            </tree>
                             <form>
                                 <field name="name" string="Term title" />
                                 <field name="input_field_ids" string="Input fields" options="{'no_create': true}" >
-                                    <list editable="bottom">
+                                    <tree editable="bottom">
                                         <field name="name" string="Name"/>
                                         <field name="value" widget="text"/>
-                                    </list>
+                                    </tree>
                                 </field>
                                 <field name="content_ids" string="Line of clauses" options="{'no_create': true}" >
-                                    <list editable="bottom">
+                                    <tree editable="bottom">
                                         <field name="content" string="Content"/>
-                                    </list>
+                                    </tree>
                                 </field>
                             </form>
                         </field>
                         <field name="document_term_display_ids" invisible="state in ('draft')" options="{'no_create': true}">
-                            <list>
+                            <tree>
                                 <field name="name" string="Terms and conditions" />
-                            </list>
+                            </tree>
                             <form>
                                 <field name="content_ids" options="{'no_create': true, 'no_edit': true}"/>
                             </form>
                         </field>
+                        
+                        <field name="state" invisible="1"/>
+                        <field name="sideB_signature" invisible="1"/>
+                        <field name="sideA_signature" invisible="1"/>
+                        <field name="sideA_user_id" invisible="1"/>
+                        <field name="sideB_user_id" invisible="1"/>
                 </sheet>
             </form>
         </field>
@@ -135,16 +141,16 @@
                             <field name="template_id" string="Template" options="{'no_create': true}" invisible="state in ('posted')"/>
                         </group>
                         <field name="document_term_ids" >
-                            <list>
+                            <tree>
                                 <field name="name" string="Term title" />
-                            </list>
+                            </tree>
                             <form>
                                 <field name="name" string="Term title" />
                                 <field name="input_field_ids" string="Input fields" options="{'no_create': true}" >
-                                    <list editable="bottom">
+                                    <tree editable="bottom">
                                         <field name="name" string="Name"/>
                                         <field name="value" widget="text"/>
-                                    </list>
+                                    </tree>
                                     <form>
                                         <group name="name" string="string">
                                             <field name="name" />
@@ -172,13 +178,13 @@
         </field>
     </record> -->
 
-    <record id="contract_document_model_view_list" model="ir.ui.view">
-        <field name="name">contract.document.list</field>
+    <record id="contract_document_model_view_tree" model="ir.ui.view">
+        <field name="name">contract.document.tree</field>
         <field name="model">contract.document</field>
         <field name="arch" type="xml">
-            <list string="">
+            <tree string="">
                 <field name="title" string="Name"/>
-            </list>
+            </tree>
         </field>
     </record>
   

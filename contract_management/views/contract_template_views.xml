@@ -6,16 +6,16 @@
         <record id="contract_template_model_action" model="ir.actions.act_window">
             <field name="name">Contract Template</field>
             <field name="res_model">contract.template</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">tree,form</field>
         </record>
 
-        <record id="contract_template_model_view_list" model="ir.ui.view">
-            <field name="name">contract.template.list</field>
+        <record id="contract_template_model_view_tree" model="ir.ui.view">
+            <field name="name">contract.template.tree</field>
             <field name="model">contract.template</field>
             <field name="arch" type="xml">
-                <list string="">
+                <tree string="">
                     <field name="name" string="Name"/>
-                </list>
+                </tree>
             </field>
         </record>
         

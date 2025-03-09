@@ -19,15 +19,15 @@
         </record>
 
 
-        <record id="contract_input_field_model_view_list" model="ir.ui.view">
-            <field name="name">contract.input.field.list</field>
+        <record id="contract_input_field_model_view_tree" model="ir.ui.view">
+            <field name="name">contract.input.field.tree</field>
             <field name="model">contract.input.field</field>
             <field name="arch" type="xml">
-                <list string="">
+                <tree string="">
                     <field name="name" string="Name" />
                     <field name="field_type" string="Field Type" />
                     
-                </list>
+                </tree>
             </field>
         </record>
     

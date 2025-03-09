@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="contract_term_content_model_view_list" model="ir.ui.view">
-            <field name="name">contract.term.content.list</field>
+        <record id="contract_term_content_model_view_tree" model="ir.ui.view">
+            <field name="name">contract.term.content.tree</field>
             <field name="model">contract.term.content</field>
             <field name="arch" type="xml">
-                <list string="">
+                <tree string="">
                     <field name="content" />
-                </list>
+                </tree>
             </field>
         </record>
 

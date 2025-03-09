@@ -28,10 +28,10 @@
                         <group>
                             <field name="name" string="Term title" />
                             <field name="input_field_ids" string="Input fields" options="{'no_create': true}">
-                                <list>
+                                <tree>
                                     <field name="name" string="Name"/>
                                     <field name="value" string="Value"/>
-                                </list>
+                                </tree>
                             </field>
                             <field name="content_ids" string="Line of clauses" options="{'no_create': true}" />
                         </group>
@@ -40,13 +40,13 @@
             </field>
         </record>
 
-        <record id="contract_term_model_view_list" model="ir.ui.view">
-            <field name="name">contract.term.list</field>
+        <record id="contract_term_model_view_tree" model="ir.ui.view">
+            <field name="name">contract.term.tree</field>
             <field name="model">contract.term</field>
             <field name="arch" type="xml">
-                <list string="" open_form_view = "true">
+                <tree string="" open_form_view = "true">
                     <field name="name" string="Term title"/>
-                </list>
+                </tree>
             </field>
         </record>
 
