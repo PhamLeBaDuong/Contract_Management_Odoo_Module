@@ -11,10 +11,10 @@ class ContractDocument(models.Model):
     
     sideA_user_id = fields.Many2one('res.users', string="Side A", index=True, tracking=True, required=True)
     # sideA_id = fields.Many2one(related='sideA_user_id.employee_id', string='Side A')
-    sideA_name = fields.Char()
-    sideA_birthday = fields.Date()
-    sideA_work_email = fields.Char()
-    sideA_work_phone = fields.Char()
+    sideA_name = fields.Char(string="Side A Name")
+    sideA_birthday = fields.Date(string="Side A Birthday")
+    sideA_work_email = fields.Char(string="Side A Work Email")
+    sideA_work_phone = fields.Char(string= "Side A Work Phone")
     sideA_address_id = fields.Many2one('res.partner', string="Side A Address")
     sideA_signature = fields.Image()
 
@@ -51,14 +51,35 @@ class ContractDocument(models.Model):
     term_content_ids = fields.Many2many('contract.term.content', string="Contents")
     document_term_display_ids = fields.Many2many('contract.term.display', 'document_id', string="Terms", readonly=True)
 
+    # @api.onchange('sideA_user_id')
+    # def _onchange_sideA_id(self):
+    #     if self.sideA_user_id:
+    #         self.sideA_name = self.sideA_user_id.employee_id.name
+    #         self.sideA_birthday = self.sideA_user_id.employee_id.birthday
+    #         self.sideA_work_email = self.sideA_user_id.work_email
+    #         self.sideA_work_phone = self.sideA_user_id.work_phone
+    #         self.sideA_address_id = self.sideA_user_id.employee_id.address_id
+    
     @api.onchange('sideA_user_id')
     def _onchange_sideA_id(self):
-        if self.sideA_user_id:
-            self.sideA_name = self.sideA_user_id.employee_id.name
-            self.sideA_birthday = self.sideA_user_id.employee_id.birthday
-            self.sideA_work_email = self.sideA_user_id.work_email
-            self.sideA_work_phone = self.sideA_user_id.work_phone
-            self.sideA_address_id = self.sideA_user_id.employee_id.address_id
+        if not self.sideA_user_id:
+            return
+            
+        # Get user information directly from res.users and res.partner
+        self.sideA_work_email = self.sideA_user_id.email
+        self.sideA_work_phone = self.sideA_user_id.work_phone
+        
+        # Try to get employee info using sudo() to bypass security restrictions
+        # This will only be used to populate the form fields, not to modify employee records
+        if self.sideA_user_id.employee_id:
+            employee = self.env['hr.employee'].sudo().browse(self.sideA_user_id.employee_id.id)
+            if employee:
+                self.sideA_birthday = employee.birthday
+                self.sideA_address_id = employee.address_id
+                self.sideA_name = employee.name
+                # Only override email if available from employee
+                # if employee.work_email:
+                #     self.sideA_work_email = employee.work_email
     
     
     @api.onchange('template_id')
