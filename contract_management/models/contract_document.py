@@ -10,21 +10,21 @@ class ContractDocument(models.Model):
     title = fields.Char()
     
     sideA_user_id = fields.Many2one('res.users', string="Side A", index=True, tracking=True, required=True)
-    sideA_id = fields.Many2one(related='sideA_user_id.employee_id', string='Side A')
-    sideA_name = fields.Char(related='sideA_id.name', readonly=False)
-    sideA_birthday = fields.Date(related='sideA_id.birthday', readonly=False)
-    sideA_work_email = fields.Char(related='sideA_id.work_email', readonly=False)
-    sideA_work_phone = fields.Char(related='sideA_id.work_phone', readonly=False)
-    sideA_address_id = fields.Many2one(related='sideA_id.address_id', readonly=False)
+    # sideA_id = fields.Many2one(related='sideA_user_id.employee_id', string='Side A')
+    sideA_name = fields.Char()
+    sideA_birthday = fields.Date()
+    sideA_work_email = fields.Char()
+    sideA_work_phone = fields.Char()
+    sideA_address_id = fields.Many2one('res.partner', string="Side A Address")
     sideA_signature = fields.Image()
 
     sideB_user_id = fields.Many2one('res.users', string="Side B", default = lambda self: self.env.user, index=True, tracking=True, readonly=True)
     sideB_id = fields.Many2one(related='sideB_user_id.employee_id', string='Side B')
-    sideB_name = fields.Char(related='sideB_id.name')
-    sideB_birthday = fields.Date(related='sideB_id.birthday')
-    sideB_work_phone = fields.Char(related='sideB_user_id.work_email')
-    sideB_work_email = fields.Char(related='sideB_user_id.work_phone')
-    sideB_address_id = fields.Many2one(related='sideB_id.address_id')
+    sideB_name = fields.Char(related='sideB_user_id.employee_id.name')
+    sideB_birthday = fields.Date(related='sideB_user_id.employee_id.birthday')
+    sideB_work_phone = fields.Char(related='sideB_user_id.work_phone')
+    sideB_work_email = fields.Char(related='sideB_user_id.work_email')
+    sideB_address_id = fields.Many2one(related='sideB_user_id.employee_id.address_id')
     sideB_signature = fields.Image()
 
 
@@ -50,18 +50,15 @@ class ContractDocument(models.Model):
     input_fields_ids = fields.Many2many('contract.input.field', string="Input Fields")
     term_content_ids = fields.Many2many('contract.term.content', string="Contents")
     document_term_display_ids = fields.Many2many('contract.term.display', 'document_id', string="Terms", readonly=True)
-    
-    @api.onchange('document_term_ids')
-    def _onchange_document_term_ids(self):
-        # print('.............................................')
-        # print(len(self.document_term_ids))
-        # print('.............................................')
-        pass
-    
-    # @api.model
-    # def update(self, vals):
-    #     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-    #     return super(ContractDocument, self).update(vals)
+
+    @api.onchange('sideA_user_id')
+    def _onchange_sideA_id(self):
+        if self.sideA_user_id:
+            self.sideA_name = self.sideA_user_id.employee_id.name
+            self.sideA_birthday = self.sideA_user_id.employee_id.birthday
+            self.sideA_work_email = self.sideA_user_id.work_email
+            self.sideA_work_phone = self.sideA_user_id.work_phone
+            self.sideA_address_id = self.sideA_user_id.employee_id.address_id
     
     
     @api.onchange('template_id')
