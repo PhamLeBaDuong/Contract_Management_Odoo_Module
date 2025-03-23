@@ -10,6 +10,7 @@ class ContractTemplate(models.Model):
     # date_of_execution = fields.Date()  
     # date_of_creation = fields.Date()
     # expiration_date = fields.Date()
+    # term_ids = fields.One2many('contract.term', 'template_id', string="Terms")
     term_ids = fields.Many2many('contract.term', string="Terms")
     document_ids = fields.One2many('contract.document', 'template_id', string="Documents")
 

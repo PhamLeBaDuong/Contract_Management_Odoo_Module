@@ -35,36 +35,120 @@ class ContractDocument(models.Model):
     date_of_execution = fields.Date('Date of Execution', readonly=True)
     version = fields.Integer()
     
-    has_product = fields.Boolean(string="Has Product?")
-    product_name = fields.Char(string="Product Name", required=has_product)
-    product_price = fields.Float(string="Product Value", required=has_product)
+    has_product = fields.Boolean(string="Has Product?", default=False)
+    product_name = fields.Char(string="Product Name")
+    product_price = fields.Float(string="Product Value")
     product_description = fields.Text(string="Product Description")
-    product_quantity = fields.Integer(string="Product Quantity", required=has_product)
+    product_quantity = fields.Integer(string="Product Quantity")
     # payment_term = fields.Selection(string="Payment Term", selection=[('monthly', 'Monthly'), ('quarterly', 'Quarterly'), ('annually', 'Annually'), ('one_time', 'One Time')], default='one_time')
     
     status = fields.Selection(string="Status", selection=[('new', 'New'), ('sent', 'Sent'), ('signed', 'Signed'), ('canceled', 'Canceled')], default='new')
     state = fields.Selection(string="State", selection=[('draft','Draft'), ('posted','Posted')], default='draft')
 
     document_term_ids = fields.Many2many('contract.term', string="Terms")
+    # document_term_ids = fields.One2many('contract.term', 'document_id', string="Terms")
     input_fields_ids = fields.Many2many('contract.input.field', string="Input Fields")
     term_content_ids = fields.Many2many('contract.term.content', string="Contents")
     document_term_display_ids = fields.Many2many('contract.term.display', 'document_id', string="Terms", readonly=True)
     
+    @api.onchange('document_term_ids')
+    def _onchange_document_term_ids(self):
+        # print('.............................................')
+        # print(len(self.document_term_ids))
+        # print('.............................................')
+        pass
+    
+    # @api.model
+    # def update(self, vals):
+    #     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    #     return super(ContractDocument, self).update(vals)
+    
     
     @api.onchange('template_id')
-    def _fetch_fields(self):            
-        if self.template_id:
-            self.document_term_ids = [(5,0,0)]
+    def _fetch_fields(self):  
+        self.ensure_one()
+        if not self.template_id:
+            return
+        
+        # # print('a')
+        # if self.template_id:
+        #     self.document_term_ids = [(5,0,0)]
+        #     term_commands = []
+        #     for term in self.template_id.term_ids:
+        #         term_commands.append((0, 0, {
+        #             'name': term.name,
+        #             'input_field_ids': [(0, 0, {'name': x.name, 'field_type': x.field_type}) for x in term.input_field_ids],
+        #             'content_ids': [(0, 0, {'content': x.content}) for x in term.content_ids],
+        #             'description': term.description,
+        #         }))
+            
+        #     self.document_term_ids = term_commands
+        
+        # Clear existing terms
+        self.document_term_ids = [(5, 0, 0)]
+        
+        # Get the template terms
+        template_terms = self.template_id.term_ids
+        
+        # Create new terms one by one
+        for template_term in template_terms:
+            # First create new input fields
+            new_input_field_ids = []
+            for field in template_term.input_field_ids:
+                new_field = self.env['contract.input.field'].create({
+                    'name': field.name,
+                    'field_type': field.field_type, 
+                })
+                new_input_field_ids.append(new_field.id)
+                
+            # Then create new content records
+            new_content_ids = []
+            for content in template_term.content_ids:
+                new_content = self.env['contract.term.content'].create({
+                    'content': content.content,
+                })
+                new_content_ids.append(new_content.id)
+            
+            # Now create the term with links to the new fields and content
+            new_term = self.env['contract.term'].create({
+                'name': template_term.name,
+                'description': template_term.description,
+                'input_field_ids': [(6, 0, new_input_field_ids)],  # Replace with all new fields
+                'content_ids': [(6, 0, new_content_ids)],  # Replace with all new content
+            })
+            
+            # Link the new term to the document
+            self.write({
+                'document_term_ids': [(4, new_term.id)]
+            })
+        
+        # Refresh the view
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
+            
+            # for term in self.template_id.term_ids:
+            #     # fetch_input_fields = [(0, 0, {'name': x.name, 'field_type': x.field_type}) for x in term.input_field_ids]
+            #     # fetch_content_fields = [(0, 0, {'content': x.content}) for x in term.content_ids]
 
-            for term in self.template_id.term_ids:
-                self.document_term_ids = [(0, 0, {
-                    'name': term.name,
-                    'input_field_ids': [(4, x) for x in term.input_field_ids.ids],
-                    'content_ids': [(4, x) for x in term.content_ids.ids],
-                    'description': term.description,
-                })]
-        else:
-            self.document_term_ids = [(5,0,0)]
+            #     self.document_term_ids = [(0, 0, {
+            #         'name': term.name,
+            #         # 'input_field_ids':  [(4, x) for x in term.input_field_ids.ids],
+            #         # 'content_ids': [(4, x) for x in term.content_ids.ids],
+            #         # 'input_field_ids':  [(4, x) for x in fetch_input_fields.ids],
+            #         # 'content_ids': [(4, x) for x in fetch_content_fields.ids],
+            #     #     'input_field_ids': [(0, 0, {'name': x.name, 'field_type': x.field_type}) for x in term.input_field_ids] + 
+            #     #    [(4, x.id, 0) for x in self.input_fields_ids],
+            #     #     'content_ids': [(0, 0, {'content': x.content}) for x in term.content_ids] + 
+            #     #    [(4, x.id, 0) for x in self.term_content_ids],
+            #         'input_field_ids': [(0, 0, {'name': x.name, 'field_type': x.field_type}) for x in term.input_field_ids],
+            #         'content_ids': [(0, 0, {'content': x.content}) for x in term.content_ids],
+            #         'description': term.description,
+            #     })]
+            
+        # else:
+        #     self.document_term_ids = [(5,0,0)]
             
     def print_contract(self):
         self.ensure_one()

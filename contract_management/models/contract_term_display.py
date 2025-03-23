@@ -9,3 +9,4 @@ class ContractTermDisplay(models.Model):
 
     name = fields.Char(string="Title")
     content_ids = fields.Many2many('contract.term.content', string="Contents")
+    sequence = fields.Integer(string="Sequence", default=10)

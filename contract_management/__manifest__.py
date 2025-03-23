@@ -22,7 +22,7 @@
         'data/contract_template_data.xml'
     ],
     'demo': [
-        'data/contract_template_data.xml' 
+        # 'data/contract_template_data.xml' 
     ],
     "application" : True,
     "installable" : True,

@@ -12,3 +12,5 @@ class ContractTerm(models.Model):
     content_ids = fields.Many2many('contract.term.content', string="Contents")
     sequence = fields.Integer()
     description = fields.Text()
+    # document_id = fields.Many2one('contract.document', string="Document")
+    # template_id = fields.Many2one('contract.template', string="Template")

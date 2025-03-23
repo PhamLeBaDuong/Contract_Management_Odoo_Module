@@ -40,15 +40,15 @@
             </field>
         </record>
 
-        <record id="contract_term_model_view_tree" model="ir.ui.view">
+        <!-- <record id="contract_term_model_view_tree" model="ir.ui.view">
             <field name="name">contract.term.tree</field>
             <field name="model">contract.term</field>
             <field name="arch" type="xml">
                 <tree string="" open_form_view = "true">
-                    <field name="name" string="Term title"/>
+                    <field name="name" string="Term title asdfhasdf"/>
                 </tree>
             </field>
-        </record>
+        </record> -->
 
     </data>
     

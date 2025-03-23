@@ -51,30 +51,31 @@
                             <field name="date_of_creation"/>
                             <field name="expiration_date" readonly="state in ('posted')"/>
                             <field name="date_of_execution"/>
-                            <field name="product_name" invisible="not has_product" />
-                            <field name="product_price" invisible="not has_product" />
-                            <field name="product_description" invisible="not has_product" />
-                            <field name="product_quantity" invisible="not has_product" />
+                            <field name="product_name" invisible="not has_product" required_if="has_product == True"/>
+                            <field name="product_price" invisible="not has_product" required_if="has_product == True"/>
+                            <field name="product_description" invisible="not has_product"/>
+                            <field name="product_quantity" invisible="not has_product" required_if="has_product == True"/>
 
                             <!-- <field name="payment_term" invisible="not has_product"/> -->
                             <!-- <field name="title" string="Title" /> -->
                             <field name="template_id" string="Template" options="{'no_create': true}" invisible="state in ('posted')"/>
                             
                         </group>
+
                         <field name="document_term_ids" invisible="state in ('posted')">
-                            <tree>
+                            <tree duplicate="false" >
                                 <field name="name" string="Term title" />
                             </tree>
                             <form>
                                 <field name="name" string="Term title" />
                                 <field name="input_field_ids" string="Input fields" options="{'no_create': true}" >
-                                    <tree editable="bottom">
+                                    <tree editable="true">
                                         <field name="name" string="Name"/>
                                         <field name="value" widget="text"/>
                                     </tree>
                                 </field>
                                 <field name="content_ids" string="Line of clauses" options="{'no_create': true}" >
-                                    <tree editable="bottom">
+                                    <tree editable="true">
                                         <field name="content" string="Content"/>
                                     </tree>
                                 </field>
@@ -94,95 +95,18 @@
                         <field name="sideA_signature" invisible="1"/>
                         <field name="sideA_user_id" invisible="1"/>
                         <field name="sideB_user_id" invisible="1"/>
+                        <field name="has_product" invisible="1"/>
+
                 </sheet>
             </form>
         </field>
     </record>
 
-
-    <!-- <record id="contract_document_model_sign_view_form" model="ir.ui.view">
-        <field name="name">contract.document.form</field>
-        <field name="model">contract.document</field>
-        <field name="arch" type="xml">
-            <form string="" readonly="1">
-                <header>
-                    <field name="status" string="Status" widget="statusbar" statusbar_visible="new,sent,signed,canceled" invisible="state in ('posted')"/>
-                    <field name="state" string="State" widget="statusbar" statusbar_visible="draft,posted" invisible="state in ('draft')" />
-                    <button name="print_contract" string="Print Contract" type="object" class="oe_highlight" invisible="state in ('posted')"/>
-                </header>
-                <sheet>
-                    <div class="oe_title">
-                    <h1><field name="title" readonly="state in ('posted')"/></h1>
-                    </div>
-                    <group>
-                        <group col="12">
-                            <group colspan="6">
-                                <field name="sideA_id" string="Side A" options="{'no_create': true}" readonly="state in ('posted')"/>
-                                <field name="sideA_name"  readonly="state in ('posted')"/>
-                                <field name="sideA_birthday"  readonly="state in ('posted')"/>
-                                <field name="sideA_work_email"  readonly="state in ('posted')"/>
-                                <field name="sideA_work_phone"  readonly="state in ('posted')"/>
-                                <field name="sideA_address_id"  readonly="state in ('posted')"/>
-                            </group>
-                            <group colspan="6">
-                                <field name="sideB_user_id"  readonly="state in ('posted')"/>
-                                <field name="sideB_name"  readonly="state in ('posted')"/>
-                                <field name="sideB_birthday"  readonly="state in ('posted')"/>
-                                <field name="sideB_work_email"  readonly="state in ('posted')"/>
-                                <field name="sideB_work_phone"  readonly="state in ('posted')"/>
-                                <field name="sideB_address_id"  readonly="state in ('posted')"/>
-                            </group>
-                        </group>
-                        <group>
-                            <field name="date_of_creation"  readonly="state in ('posted')"/>
-                            <field name="expiration_date"  readonly="state in ('posted')"/>
-                            <field name="date_of_execution"  readonly="state in ('posted')"/>
-                            <field name="title" string="Title" />
-                            <field name="template_id" string="Template" options="{'no_create': true}" invisible="state in ('posted')"/>
-                        </group>
-                        <field name="document_term_ids" >
-                            <tree>
-                                <field name="name" string="Term title" />
-                            </tree>
-                            <form>
-                                <field name="name" string="Term title" />
-                                <field name="input_field_ids" string="Input fields" options="{'no_create': true}" >
-                                    <tree editable="bottom">
-                                        <field name="name" string="Name"/>
-                                        <field name="value" widget="text"/>
-                                    </tree>
-                                    <form>
-                                        <group name="name" string="string">
-                                            <field name="name" />
-                                            <field name="value"/>
-
-                                        </group>
-                                    </form>
-                                </field>
-                                <field name="content_ids" string="Line of clauses" options="{'no_create': true}" />
-                            </form>
-                        </field>
-                        <group col="12">
-                            <group colspan="6">
-                                <field name="sideA_name" nolabel="1" />
-                                <field name="sideA_signature" />
-                            </group>
-                            <group colspan="6">
-                                <field name="sideB_name" nolabel="1" />
-                                <field name="sideB_signature" />
-                            </group>
-                        </group>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record> -->
-
     <record id="contract_document_model_view_tree" model="ir.ui.view">
         <field name="name">contract.document.tree</field>
         <field name="model">contract.document</field>
         <field name="arch" type="xml">
-            <tree string="">
+            <tree string="" duplicate="false">
                 <field name="title" string="Name"/>
             </tree>
         </field>
